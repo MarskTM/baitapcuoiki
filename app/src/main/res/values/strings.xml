@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">projectcuoiky</string>
+
+    <string name="title_store">Store</string>
+    <string name="coin_text">351 🪙</string>
+    <string name="tab_classic">Classic</string>
+    <string name="tab_exclusive">Exclusive</string>
+    <string name="tab_sound">Sound</string>
+    <string name="plant_image">Plant Image</string>
+</resources>
