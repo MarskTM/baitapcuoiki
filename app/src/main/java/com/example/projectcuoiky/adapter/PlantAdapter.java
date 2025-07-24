@@ -11,9 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projectcuoiky.DetailActivity;
 import com.example.projectcuoiky.R;
 import com.example.projectcuoiky.model.PlantItem;
+
+// Nhớ import các Activity detail bạn đã tạo!
+import com.example.projectcuoiky.HealthDetailActivity;
+import com.example.projectcuoiky.HeartDetailActivity;
+import com.example.projectcuoiky.AccelerationDetailActivity;
+import com.example.projectcuoiky.AlertDetailActivity;
 
 import java.util.List;
 
@@ -41,7 +46,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         holder.imagePlant.setImageResource(plant.getImageResId());
         holder.textName.setText(plant.getName());
 
-        // Hiển thị Unlocked nếu giá là "0"
+        // Hiển thị Unlocked nếu giá là "0" hoặc "Unlocked"
         if ("0".equals(plant.getPrice()) || "Unlocked".equalsIgnoreCase(plant.getPrice())) {
             holder.textPrice.setText("Unlocked");
             holder.textPrice.setTextColor(context.getResources().getColor(android.R.color.holo_blue_dark));
@@ -50,13 +55,28 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             holder.textPrice.setTextColor(context.getResources().getColor(android.R.color.holo_orange_dark));
         }
 
-        // Khi click vào item
+        // Xử lý click cho từng loại cây
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("plantName", plant.getName());
-            intent.putExtra("plantPrice", plant.getPrice());
-            intent.putExtra("plantImage", plant.getImageResId());
-            context.startActivity(intent);
+            Intent intent = null;
+            String name = plant.getName();
+
+            if ("Sức khỏe".equals(name)) {
+                intent = new Intent(context, HealthDetailActivity.class);
+            } else if ("Trái tim".equals(name)) {
+                intent = new Intent(context, HeartDetailActivity.class);
+            } else if ("Gia tốc".equals(name)) {
+                intent = new Intent(context, AccelerationDetailActivity.class);
+            } else if ("Cảnh báo".equals(name)) {
+                intent = new Intent(context, AlertDetailActivity.class);
+            }
+
+            // Có thể truyền thêm dữ liệu nếu muốn (tùy chỉnh theo ý bạn)
+            if (intent != null) {
+                intent.putExtra("plantName", plant.getName());
+                intent.putExtra("plantPrice", plant.getPrice());
+                intent.putExtra("plantImage", plant.getImageResId());
+                context.startActivity(intent);
+            }
         });
     }
 
