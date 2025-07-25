@@ -1,10 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccelerationDetailActivity">
+    android:background="#F6F8FB"
+    android:orientation="vertical"
+    android:padding="20dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"/>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gia tốc"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:layout_marginStart="12dp"
+            android:textColor="#222"/>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="18dp" />
+
+    <!-- Acceleration Value -->
+    <TextView
+        android:id="@+id/acceleration_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9.8 m/s²"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#1E88E5"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"/>
+
+    <View android:layout_width="match_parent" android:layout_height="10dp" />
+
+    <!-- Biểu đồ (LineChart) -->
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp" />
+
+    <View android:layout_width="match_parent" android:layout_height="12dp" />
+
+    <!-- Checkbox trạng thái -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <CheckBox
+            android:id="@+id/checkboxStable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gia tốc ổn định"
+            android:textSize="16sp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="10dp"/>
+
+    <!-- Thiết bị khác -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thiết bị khác:"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#444"
+        android:layout_marginTop="6dp"/>
+
+    <LinearLayout
+        android:id="@+id/device_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="4dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="- Server" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="- Điện thoại 1" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="- Điện thoại 2" />
+    </LinearLayout>
+
+    <!-- Refresh Button -->
+    <Button
+        android:id="@+id/btn_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Làm mới giao diện"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp" />
+</LinearLayout>

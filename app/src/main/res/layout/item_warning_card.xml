@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/bg_card_rounded"
+    android:layout_marginBottom="12dp"
+    android:elevation="2dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp">
+
+    <!-- Nhịp tim & thời gian -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textHeartRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="120 nhịp/phút"
+            android:textStyle="bold"
+            android:textColor="#E53935"
+            android:textSize="18sp"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 tháng 4 18:33"
+            android:textColor="#666"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Cảnh báo -->
+    <TextView
+        android:id="@+id/textWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nhịp tim cao vượt ngưỡng an toàn!"
+        android:textSize="16sp"
+        android:textColor="#333"
+        android:layout_marginTop="6dp" />
+</LinearLayout>

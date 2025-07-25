@@ -1,10 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AlertDetailActivity">
+    android:padding="20dp"
+    android:background="#FFFFFF">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sức khỏe"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="#222"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Trạng thái và thông số -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <!-- Trạng thái + thời gian -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp">
+
+                <TextView
+                    android:id="@+id/textStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tốt"
+                    android:textStyle="bold"
+                    android:textSize="44sp"
+                    android:textColor="#2E7D32" />
+
+                <TextView
+                    android:id="@+id/textTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9:00 - 11/12/2002"
+                    android:textSize="14sp"
+                    android:textColor="#555"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Thông số -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginStart="15dp">
+
+                <TextView
+                    android:id="@+id/textHeartRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="103 nhịp/phút"
+                    android:textSize="16sp"
+                    android:textColor="#D32F2F" />
+
+                <TextView
+                    android:id="@+id/textAcceleration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8.9 m/s²"
+                    android:textSize="16sp"
+                    android:textColor="#1976D2"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:id="@+id/textX"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="x = 1.00"
+                    android:textSize="16sp"
+                    android:textColor="#333"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:id="@+id/textY"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="y = 2.00"
+                    android:textSize="16sp"
+                    android:textColor="#333"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Thang đánh giá nhịp tim -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhịp tim"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="34dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thấp"
+                android:gravity="start"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_low"
+                android:layout_marginHorizontal="4dp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Bình thường"
+                android:gravity="center"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_medium"
+                android:layout_marginHorizontal="4dp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cao"
+                android:gravity="end"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_high"
+                android:layout_marginStart="4dp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <!-- Thang đánh giá gia tốc -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gia tốc"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thấp"
+                android:gravity="start"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_low"
+                android:layout_marginHorizontal="4dp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Bình thường"
+                android:gravity="center"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_medium"
+                android:layout_marginHorizontal="4dp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cao"
+                android:gravity="end"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_high"
+                android:layout_marginStart="4dp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <!-- Thiết bị BLE khả dụng -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thiết bị BLE khả dụng:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#222"
+            android:layout_marginTop="44dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/deviceRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <!-- Nút Làm mới -->
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Làm mới dữ liệu"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:backgroundTint="#2196F3"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_rounded_blue" />
+    </LinearLayout>
+</ScrollView>
