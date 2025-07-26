@@ -1,104 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FB"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:background="#F6F8FB">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_arrow_back"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Back"/>
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trái tim"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:layout_marginStart="12dp"
+                android:textColor="#222" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
+
+        <!-- Nhịp tim lớn -->
         <TextView
-            android:id="@+id/textTitle"
+            android:id="@+id/textHeartRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trái tim"
+            android:text="103 nhịp/phút"
+            android:textSize="36sp"
             android:textStyle="bold"
-            android:textSize="22sp"
-            android:layout_marginStart="12dp"
-            android:textColor="#222"/>
-    </LinearLayout>
+            android:textColor="#E84C4F"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="18dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
-    <!-- Nhịp tim lớn -->
-    <TextView
-        android:id="@+id/textHeartRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="103 nhịp/phút"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:textColor="#E84C4F"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"/>
+        <!-- Biểu đồ đường (LineChart) -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
 
-    <!-- Biểu đồ đường (LineChart) -->
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginTop="10dp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="12dp" />
-
-    <!-- CheckBox trạng thái ổn định -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <CheckBox
-            android:id="@+id/checkboxStable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"/>
+        <!-- Tình trạng & Xu hướng -->
         <TextView
+            android:id="@+id/textStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nhịp tim ổn định"
+            android:text="❤️ Tình trạng: Bình thường"
             android:textSize="16sp"
-            android:layout_marginStart="8dp"/>
+            android:textColor="#333"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/textTrend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📈 Xu hướng: Ổn định"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginTop="4dp" />
+
+        <!-- Thông tin thiết bị BLE -->
+        <TextView
+            android:id="@+id/textBleTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📡 Thiết bị BLE đang kết nối:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginTop="64dp" />
+
+        <TextView
+            android:id="@+id/textBleName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Tên thiết bị: Chưa rõ"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/textBleAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Địa chỉ: Chưa rõ"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:layout_marginTop="2dp" />
+
+        <TextView
+            android:id="@+id/textBleMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Phương thức: Chưa xác định"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:layout_marginTop="2dp" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"/>
-
-    <!-- Thiết bị khác -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thiết bị khác:"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="#444"
-        android:layout_marginTop="6dp"/>
-
-    <TextView
-        android:id="@+id/textDevice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="- Device 1"
-        android:textSize="15sp"
-        android:layout_marginTop="2dp"/>
-</LinearLayout>
+</ScrollView>

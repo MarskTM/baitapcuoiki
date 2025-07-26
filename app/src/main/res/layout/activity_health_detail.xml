@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:padding="20dp">
 
         <!-- Header -->
         <LinearLayout
@@ -243,8 +242,36 @@
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
 
+        <!-- Trạng thái té ngã -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_fall_status"
+            android:padding="12dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_check_circle"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/textFallStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Không phát hiện té ngã gần đây"
+                android:textColor="#4CAF50"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
         <!-- Thiết bị BLE khả dụng -->
         <TextView
+            android:id="@+id/deviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thiết bị BLE khả dụng:"
@@ -257,14 +284,15 @@
             android:id="@+id/deviceRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:padding="4dp" />
 
-        <!-- Nút Làm mới -->
+        <!-- Nút Tìm kiếm thiết bị -->
         <Button
             android:id="@+id/btnRefresh"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Làm mới dữ liệu"
+            android:text="Tìm kiếm thiết bị"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:backgroundTint="#2196F3"

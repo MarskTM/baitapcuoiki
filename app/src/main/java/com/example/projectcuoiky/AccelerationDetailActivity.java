@@ -41,19 +41,10 @@ public class AccelerationDetailActivity extends AppCompatActivity {
         // Ánh xạ view
         accelerationValue = findViewById(R.id.acceleration_value);
         lineChart = findViewById(R.id.graph);
-        checkboxStable = findViewById(R.id.checkboxStable);
-        btnRefresh = findViewById(R.id.btn_refresh);
         btnBack = findViewById(R.id.btnBack);
 
         // Gán dữ liệu demo
         accelerationValue.setText("9.8 m/s²");
-        checkboxStable.setChecked(true);
-
-        // Xử lý nút Làm mới
-        btnRefresh.setOnClickListener(v -> {
-            Toast.makeText(this, "Đã làm mới giao diện!", Toast.LENGTH_SHORT).show();
-            // TODO: Thêm logic cập nhật dữ liệu ở đây nếu có
-        });
 
         // Xử lý nút Back
         btnBack.setOnClickListener(v -> finish());

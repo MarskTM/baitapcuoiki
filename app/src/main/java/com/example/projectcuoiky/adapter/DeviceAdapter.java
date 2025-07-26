@@ -14,14 +14,24 @@ import java.util.List;
 
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder> {
 
-    public interface OnDeviceClickListener {
-        void onDeviceClick(String deviceName);
+    public static class DeviceInfo {
+        public final String name;
+        public final String address;
+
+        public DeviceInfo(String name, String address) {
+            this.name = name;
+            this.address = address;
+        }
     }
 
-    private final List<String> deviceList;
+    public interface OnDeviceClickListener {
+        void onDeviceClick(DeviceInfo device);
+    }
+
+    private final List<DeviceInfo> deviceList;
     private final OnDeviceClickListener listener;
 
-    public DeviceAdapter(List<String> deviceList, OnDeviceClickListener listener) {
+    public DeviceAdapter(List<DeviceInfo> deviceList, OnDeviceClickListener listener) {
         this.deviceList = deviceList;
         this.listener = listener;
     }
@@ -36,9 +46,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.DeviceView
 
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
-        String name = deviceList.get(position);
-        holder.deviceName.setText(name);
-        holder.itemView.setOnClickListener(v -> listener.onDeviceClick(name));
+        DeviceInfo device = deviceList.get(position);
+        holder.deviceName.setText(device.name != null ? device.name : "Không rõ tên");
+        holder.deviceAddress.setText(device.address);
+        holder.itemView.setOnClickListener(v -> listener.onDeviceClick(device));
     }
 
     @Override
@@ -48,10 +59,13 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.DeviceView
 
     public static class DeviceViewHolder extends RecyclerView.ViewHolder {
         TextView deviceName;
+        TextView deviceAddress;
 
         public DeviceViewHolder(@NonNull View itemView) {
             super(itemView);
             deviceName = itemView.findViewById(R.id.deviceName);
+            deviceAddress = itemView.findViewById(R.id.deviceAddress);
         }
     }
 }
+
