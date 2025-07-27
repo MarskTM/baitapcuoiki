@@ -16,6 +16,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 
+import com.example.projectcuoiky.MyApp;
+import com.example.projectcuoiky.session.DeviceSession;
+
 public class AccelerationDetailActivity extends AppCompatActivity {
 
     TextView accelerationValue;
@@ -30,6 +33,17 @@ public class AccelerationDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_acceleration_detail);
+
+        // Lấy thông tin vẽ đồ thị gia tốc
+        DeviceSession session = MyApp.getDeviceSession();
+
+        if (session.getType() == DeviceSession.Type.SERVER) {
+            fetchFromServer(session.getServerUrl());
+        } else if (session.getType() == DeviceSession.Type.BLUETOOTH) {
+            connectToBLE(session.getBluetoothMac());
+        } else {
+            Toast.makeText(this, "Không có kết nối thiết bị", Toast.LENGTH_SHORT).show();
+        }
 
         // Set padding để tránh bị che status bar
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -49,4 +63,7 @@ public class AccelerationDetailActivity extends AppCompatActivity {
         // Xử lý nút Back
         btnBack.setOnClickListener(v -> finish());
     }
+
+    private void fetchFromServer(String url) {  }
+    private void connectToBLE(String mac) {  }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F8FA">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="28dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký tài khoản"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#222"
+            android:layout_marginTop="76dp" />
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Tên người dùng"
+            android:background="@drawable/bg_edittext_login"
+            android:layout_marginTop="32dp"
+            android:paddingHorizontal="16dp"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Mật khẩu"
+            android:inputType="textPassword"
+            android:background="@drawable/bg_edittext_login"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Xác nhận mật khẩu"
+            android:inputType="textPassword"
+            android:background="@drawable/bg_edittext_login"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Đăng ký"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/sign_in_button" />
+    </LinearLayout>
+</ScrollView>

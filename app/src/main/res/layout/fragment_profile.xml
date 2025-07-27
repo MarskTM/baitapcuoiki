@@ -4,59 +4,111 @@
     android:layout_height="match_parent"
     android:background="#F3F3F3">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center"
-        android:padding="24dp">
+        android:layout_height="match_parent">
 
-        <!-- Tiêu đề -->
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Thông tin người dùng"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:layout_marginBottom="24dp" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:padding="24dp">
 
-        <!-- Tài khoản -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="👤 Tài khoản: ntkd"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:layout_marginBottom="12dp" />
+            <!-- Tiêu đề -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin người dùng"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="24dp" />
 
-        <!-- Vai trò -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🎖️ Vai trò: user"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:layout_marginBottom="12dp" />
+            <!-- Tài khoản -->
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👤 Tài khoản:"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-        <!-- Điểm -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🪙 Điểm: 351"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:layout_marginBottom="12dp" />
+            <!-- Vai trò -->
+            <TextView
+                android:id="@+id/tvRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎖️ Vai trò:"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
 
-        <!-- Ngày đăng ký -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📅 Ngày đăng ký: 26/07/2025"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:layout_marginBottom="12dp" />
+            <!-- Điểm -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🪙 Điểm: 351"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp" />
 
-    </LinearLayout>
+            <!-- Ngày đăng ký -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📅 Ngày đăng ký: 26/07/2025"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Form tạo tài khoản (hiện nếu là admin) -->
+            <LinearLayout
+                android:id="@+id/registerFormLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔧 Tạo tài khoản mới"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="12dp" />
+
+                <EditText
+                    android:id="@+id/etNewUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tên tài khoản"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/etNewPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mật khẩu"
+                    android:inputType="textPassword"
+                    android:layout_marginBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spnNewRole"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btnCreateUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tạo tài khoản" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

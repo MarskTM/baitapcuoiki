@@ -23,12 +23,11 @@
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/plant_image"
+            android:contentDescription="Hình cây"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- Tên cây -->
         <TextView

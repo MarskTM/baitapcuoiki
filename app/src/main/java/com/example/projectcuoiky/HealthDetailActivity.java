@@ -3,11 +3,19 @@ package com.example.projectcuoiky;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,15 +29,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projectcuoiky.adapter.DeviceAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
 
 public class HealthDetailActivity extends AppCompatActivity {
+
+    private final String serverUrl = "http://192.168.2.6/getdata.php";
+    private final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private DeviceAdapter adapter;
     private RecyclerView recyclerView;
     private Button btnRefresh;
+
+    private BluetoothSocket bluetoothSocket;
+
+    private final Handler fetchHandler = new Handler();
+    private final Runnable fetchRunnable = new Runnable() {
+        @Override
+        public void run() {
+            fetchDataFromServer(serverUrl);
+            fetchHandler.postDelayed(this, 300); // 0.3 giây
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +74,50 @@ public class HealthDetailActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Nút quay lại
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
-        // Khởi tạo RecyclerView
         recyclerView = findViewById(R.id.deviceRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Nút tìm kiếm thiết bị
         btnRefresh = findViewById(R.id.btnRefresh);
         btnRefresh.setText("Tìm kiếm thiết bị");
         btnRefresh.setOnClickListener(v -> loadBluetoothDevices());
+
+        MyApp.getDeviceSession().setServer(serverUrl);
+        fetchHandler.post(fetchRunnable);
+
+        LinearLayout serverCard = findViewById(R.id.serverCard);
+        serverCard.setOnClickListener(v -> {
+            Animation clickAnim = AnimationUtils.loadAnimation(this, R.anim.click_scale);
+            v.startAnimation(clickAnim);
+
+            clickAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    runOnUiThread(() -> {
+                        MyApp.getDeviceSession().setServer(serverUrl);
+                        fetchDataFromServer(serverUrl);
+                    });
+                }
+
+                @Override public void onAnimationStart(Animation animation) {}
+                @Override public void onAnimationRepeat(Animation animation) {}
+            });
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fetchHandler.removeCallbacks(fetchRunnable);
+        try {
+            if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
+                bluetoothSocket.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadBluetoothDevices() {
@@ -65,7 +128,6 @@ public class HealthDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Android 12+ yêu cầu quyền BLUETOOTH_CONNECT
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -85,14 +147,31 @@ public class HealthDetailActivity extends AppCompatActivity {
         }
 
         adapter = new DeviceAdapter(deviceList, device -> {
-            Toast.makeText(this, "Đã chọn thiết bị: " + (device.name != null ? device.name : device.address), Toast.LENGTH_SHORT).show();
-            // TODO: Xử lý thêm khi chọn thiết bị
+            Toast.makeText(this, "Đang kết nối tới: " + device.address, Toast.LENGTH_SHORT).show();
+            MyApp.getDeviceSession().setBluetooth(device.name, device.address);
+
+            BluetoothDevice btDevice = bluetoothAdapter.getRemoteDevice(device.address);
+
+            new Thread(() -> {
+                try {
+                    bluetoothSocket = btDevice.createRfcommSocketToServiceRecord(SPP_UUID);
+                    bluetoothSocket.connect();
+
+                    runOnUiThread(() -> Toast.makeText(this, "✅ Đã kết nối Bluetooth", Toast.LENGTH_SHORT).show());
+
+                    bluetoothSocket.getOutputStream().write("START".getBytes());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() ->
+                            Toast.makeText(this, "❌ Lỗi kết nối: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                }
+            }).start();
         });
 
         recyclerView.setAdapter(adapter);
     }
 
-    // Xử lý khi người dùng cấp quyền
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -100,5 +179,54 @@ public class HealthDetailActivity extends AppCompatActivity {
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             loadBluetoothDevices();
         }
+    }
+
+    private void fetchDataFromServer(String serverUrl) {
+        new Thread(() -> {
+            try {
+                URL url = new URL(serverUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(3000);
+                conn.setReadTimeout(3000);
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+
+                    JSONArray jsonArray = new JSONArray(response.toString());
+                    if (jsonArray.length() > 0) {
+                        JSONObject json = jsonArray.getJSONObject(0);
+
+                        int heartRate = json.getInt("bpm");
+                        double x = json.getDouble("x");
+                        double y = json.getDouble("y");
+                        double z = json.getDouble("z");
+
+                        double accel = Math.sqrt(x * x + y * y + z * z);
+
+                        runOnUiThread(() -> {
+                            ((TextView) findViewById(R.id.textHeartRate)).setText(heartRate + " nhịp/phút");
+                            ((TextView) findViewById(R.id.textAcceleration)).setText(String.format("%.2f m/s²", accel));
+                            ((TextView) findViewById(R.id.textX)).setText("x = " + x);
+                            ((TextView) findViewById(R.id.textY)).setText("y = " + y);
+                            ((TextView) findViewById(R.id.textZ)).setText("z = " + z);
+                        });
+                    }
+
+                } else {
+                    Log.e("HTTP", "Server response: " + responseCode);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("HTTP", "Error: " + e.getMessage());
+            }
+        }).start();
     }
 }

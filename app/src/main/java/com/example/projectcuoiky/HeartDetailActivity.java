@@ -1,13 +1,19 @@
 package com.example.projectcuoiky;
 
+import com.example.projectcuoiky.MyApp;
+import com.example.projectcuoiky.session.DeviceSession;
+
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -19,6 +25,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +59,20 @@ public class HeartDetailActivity extends AppCompatActivity {
         TextView textBleName = findViewById(R.id.textBleName);
         TextView textBleAddress = findViewById(R.id.textBleAddress);
         TextView textBleMethod = findViewById(R.id.textBleMethod);
+
+        // --------- Lấy thông tin ĐỒ THỊ ---------
+        DeviceSession session = MyApp.getDeviceSession();
+
+        if (session.getType() == DeviceSession.Type.SERVER) {
+            String url = session.getServerUrl();
+            fetchDataFromServer(url); // gọi hàm fetch server
+        } else if (session.getType() == DeviceSession.Type.BLUETOOTH) {
+            String name = session.getBluetoothDeviceName();
+            String mac = session.getBluetoothMac();
+            connectToBluetoothDevice(mac); // gọi hàm xử lý BLE
+        } else {
+            Toast.makeText(this, "Chưa có thiết bị kết nối", Toast.LENGTH_SHORT).show();
+        }
 
         // --------- DỮ LIỆU NHỊP TIM MẪU ---------
         List<Entry> entries = new ArrayList<>();
@@ -148,6 +174,7 @@ public class HeartDetailActivity extends AppCompatActivity {
         lineChart.getDescription().setEnabled(false);
         lineChart.getLegend().setEnabled(false);
         lineChart.invalidate(); // refresh chart
+
     }
 
     // --- Xử lý kết quả khi người dùng cấp quyền ---
@@ -159,5 +186,89 @@ public class HeartDetailActivity extends AppCompatActivity {
                 recreate(); // chạy lại activity khi đã có quyền
             }
         }
+    }
+
+    private void fetchDataFromServer(String url) {
+        new Thread(() -> {
+            try {
+                URL serverUrl = new URL(url);
+                HttpURLConnection conn = (HttpURLConnection) serverUrl.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(3000);
+                conn.setReadTimeout(3000);
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+
+                    JSONObject json = new JSONObject(response.toString());
+
+                    int heartRate = json.getInt("heartRate");
+                    double accel = json.getDouble("acceleration");
+                    double x = json.getDouble("x");
+                    double y = json.getDouble("y");
+                    boolean fall = json.getBoolean("fall");
+
+                    runOnUiThread(() -> {
+                        // Cập nhật lên giao diện (bạn có thể tuỳ chỉnh theo màn hiện tại)
+                        ((TextView) findViewById(R.id.textHeartRate)).setText(heartRate + " nhịp/phút");
+                        ((TextView) findViewById(R.id.textAcceleration)).setText(accel + " m/s²");
+                        ((TextView) findViewById(R.id.textX)).setText("x = " + x);
+                        ((TextView) findViewById(R.id.textY)).setText("y = " + y);
+
+                        TextView fallText = findViewById(R.id.textFallStatus);
+                        fallText.setText(fall ? "Phát hiện té ngã" : "Không có té ngã");
+                        fallText.setTextColor(fall ? Color.RED : Color.parseColor("#4CAF50"));
+                    });
+
+                } else {
+                    Log.e("HTTP", "Lỗi kết nối server: " + responseCode);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("HTTP", "Lỗi: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void connectToBluetoothDevice(String mac) {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+            Toast.makeText(this, "Bluetooth không khả dụng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1001);
+            return;
+        }
+
+        BluetoothDevice targetDevice = null;
+        for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
+            if (device.getAddress().equals(mac)) {
+                targetDevice = device;
+                break;
+            }
+        }
+
+        if (targetDevice == null) {
+            Toast.makeText(this, "Không tìm thấy thiết bị BLE", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // ✅ Đây là nơi bạn thực hiện kết nối GATT hoặc custom BLE protocol của bạn
+        Toast.makeText(this, "Đã tìm thấy BLE: " + targetDevice.getName(), Toast.LENGTH_SHORT).show();
+
+        // TODO: Thêm xử lý kết nối GATT tại đây nếu cần
     }
 }

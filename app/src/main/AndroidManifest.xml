@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Quyền truy cập Internet & Bluetooth -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,7 +16,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Projectcuoiky">
+        android:theme="@style/Theme.Projectcuoiky"
+        android:networkSecurityConfig="@xml/network_security_config"> <!-- ✅ dòng thêm -->
+
         <activity
             android:name=".AlertDetailActivity"
             android:exported="false" />
@@ -24,16 +30,18 @@
             android:exported="false" />
         <activity
             android:name=".HealthDetailActivity"
-            android:exported="false" /> <!-- SplashActivity là launcher -->
+            android:exported="false" />
+
+        <!-- ✅ Splash là launcher -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Thêm LoginActivity -->
+        </activity>
+
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
@@ -43,6 +51,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
+        <!-- ✅ THÊM RegisterActivity -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

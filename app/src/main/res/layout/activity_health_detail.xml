@@ -115,6 +115,15 @@
                     android:textSize="16sp"
                     android:textColor="#333"
                     android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:id="@+id/textZ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="z = 0.00"
+                    android:textSize="16sp"
+                    android:textColor="#333"
+                    android:layout_marginTop="4dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -125,69 +134,7 @@
             android:text="Nhịp tim"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:layout_marginTop="34dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="6dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Thấp"
-                android:gravity="start"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@drawable/dot_low"
-                android:layout_marginHorizontal="4dp"
-                android:layout_gravity="center_vertical" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Bình thường"
-                android:gravity="center"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@drawable/dot_medium"
-                android:layout_marginHorizontal="4dp"
-                android:layout_gravity="center_vertical" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cao"
-                android:gravity="end"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@drawable/dot_high"
-                android:layout_marginStart="4dp"
-                android:layout_gravity="center_vertical" />
-        </LinearLayout>
-
-        <!-- Thang đánh giá gia tốc -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gia tốc"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="14dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -249,7 +196,7 @@
             android:orientation="horizontal"
             android:background="@drawable/bg_fall_status"
             android:padding="12dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="22dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical">
 
@@ -269,6 +216,46 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
+        <!-- Server khả dụng -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Server khả dụng:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#222"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/serverCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_selector"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/textServerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ: http://192.168.1.1:8080"
+                android:textSize="15sp"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/textServerStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tình trạng: chưa kết nối"
+                android:textSize="15sp"
+                android:textColor="#888"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+
         <!-- Thiết bị BLE khả dụng -->
         <TextView
             android:id="@+id/deviceName"
@@ -278,8 +265,9 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="#222"
-            android:layout_marginTop="44dp" />
+            android:layout_marginTop="34dp" />
 
+        <!-- Nút Tìm kiếm thiết bị -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/deviceRecyclerView"
             android:layout_width="match_parent"
@@ -287,12 +275,11 @@
             android:layout_marginTop="8dp"
             android:padding="4dp" />
 
-        <!-- Nút Tìm kiếm thiết bị -->
         <Button
             android:id="@+id/btnRefresh"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Tìm kiếm thiết bị"
+            android:text="Làm mới thiết bị"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:backgroundTint="#2196F3"

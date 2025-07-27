@@ -15,6 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.projectcuoiky.MyApp;
+import com.example.projectcuoiky.session.DeviceSession;
+
 public class AlertDetailActivity extends AppCompatActivity {
 
     LinearLayout warningContainer;
@@ -23,7 +26,16 @@ public class AlertDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_alert_detail); // đảm bảo XML có id="main"
+        setContentView(R.layout.activity_alert_detail);
+
+        // Lấy thông tin thiết bị kết nối để nhận cảnh báo
+        DeviceSession session = MyApp.getDeviceSession();
+
+        if (session.getType() == DeviceSession.Type.SERVER) {
+            checkFallFromServer(session.getServerUrl());
+        } else if (session.getType() == DeviceSession.Type.BLUETOOTH) {
+            readFallSensorFromBLE(session.getBluetoothMac());
+        }
 
         // Apply padding để không bị che
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -64,4 +76,7 @@ public class AlertDetailActivity extends AppCompatActivity {
             this.time = time;
         }
     }
+
+    private void checkFallFromServer(String url) {  }
+    private void readFallSensorFromBLE(String mac) {  }
 }
