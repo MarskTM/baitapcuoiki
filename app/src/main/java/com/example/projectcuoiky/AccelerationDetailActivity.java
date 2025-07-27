@@ -34,12 +34,15 @@ public class AccelerationDetailActivity extends AppCompatActivity {
 
     private LineChart chart;
     private TextView textAccel, textStatus, textX, textY, textZ;
-    private TextView deviceName, deviceAddress, deviceMethod;
 
     private final List<Entry> entries = new ArrayList<>();
     private final List<String> labels = new ArrayList<>();
     private final Handler handler = new Handler();
     private Runnable fetchTask;
+
+    private BluetoothConnector btConnector;
+    private TextView deviceName, deviceAddress, deviceMethod;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +82,69 @@ public class AccelerationDetailActivity extends AppCompatActivity {
         }
 
         // Bắt đầu fetch dữ liệu định kỳ
-        startAutoFetch(serverUrl);
+        if (session.getType() == DeviceSession.Type.BLUETOOTH && session.getBluetoothMac() != null) {
+            btConnector = new BluetoothConnector();
+            btConnector.connect(session.getBluetoothMac(), new BluetoothConnector.Listener() {
+                @Override
+                public void onConnected() {
+                    runOnUiThread(() -> Log.d("BLE", "✅ Kết nối Bluetooth thành công"));
+                    btConnector.send("START"); // nếu thiết bị cần tín hiệu bắt đầu
+                }
+
+                @Override
+                public void onDataReceived(String data) {
+                    // Dữ liệu dạng "x,y,z"
+                    try {
+                        String[] parts = data.trim().split(",");
+                        if (parts.length != 3) return;
+
+                        double x = Double.parseDouble(parts[0]);
+                        double y = Double.parseDouble(parts[1]);
+                        double z = Double.parseDouble(parts[2]);
+                        double accel = Math.sqrt(x * x + y * y + z * z);
+
+                        long now = System.currentTimeMillis();
+                        String label = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(now);
+
+                        runOnUiThread(() -> {
+                            // cập nhật UI
+                            textAccel.setText(String.format("%.2f m/s²", accel));
+                            textX.setText("• Tọa độ X: " + x);
+                            textY.setText("• Tọa độ Y: " + y);
+                            textZ.setText("• Tọa độ Z: " + z);
+                            textStatus.setText("📈 Tình trạng: " + (accel > 15 ? "Cảnh báo" : "Bình thường"));
+                            textStatus.setTextColor(accel > 15 ? Color.RED : Color.parseColor("#4CAF50"));
+
+                            // cập nhật biểu đồ
+                            entries.add(new Entry(entries.size(), (float) accel));
+                            labels.add(label);
+
+                            if (entries.size() > 30) {
+                                entries.remove(0);
+                                labels.remove(0);
+                                for (int i = 0; i < entries.size(); i++) {
+                                    entries.get(i).setX(i);
+                                }
+                            }
+
+                            updateChart();
+                        });
+
+                    } catch (Exception e) {
+                        Log.e("BLE", "Lỗi phân tích dữ liệu: " + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onError(String message) {
+                    runOnUiThread(() -> Log.e("BLE", "❌ Lỗi Bluetooth: " + message));
+                }
+            });
+
+        } else {
+            // Nếu là HTTP thì giữ nguyên
+            startAutoFetch(serverUrl);
+        }
     }
 
     private void startAutoFetch(String url) {
@@ -184,6 +249,9 @@ public class AccelerationDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (btConnector != null) {
+            btConnector.disconnect();
+        }
         handler.removeCallbacks(fetchTask);
     }
 }

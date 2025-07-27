@@ -42,7 +42,7 @@
             android:id="@+id/acceleration_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="9.8 m/s²"
+            android:text="0.0 m/s²"
             android:textSize="36sp"
             android:textStyle="bold"
             android:textColor="#1E88E5"
@@ -87,14 +87,14 @@
                     android:id="@+id/textAccelX"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="• Tọa độ X: 3.2"
+                    android:text="• Tọa độ X: 0.0"
                     android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/textAccelY"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="• Tọa độ Y: 5.1"
+                    android:text="• Tọa độ Y: 0.0"
                     android:textSize="15sp"
                     android:layout_marginTop="4dp" />
 
@@ -102,7 +102,7 @@
                     android:id="@+id/textAccelZ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="• Tọa độ Z: 2.0"
+                    android:text="• Tọa độ Z: 0.0"
                     android:textSize="15sp"
                     android:layout_marginTop="4dp" />
             </LinearLayout>
