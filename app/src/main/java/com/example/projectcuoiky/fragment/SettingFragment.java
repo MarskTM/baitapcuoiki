@@ -27,13 +27,6 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        // Luôn hiển thị layout mặc định cho tất cả người dùng
-        LinearLayout registerForm = v.findViewById(R.id.registerUserForm);
-        LinearLayout normalLayout = v.findViewById(R.id.normalLayout);
-
-        registerForm.setVisibility(View.GONE);      // Ẩn luôn form tạo user
-        normalLayout.setVisibility(View.VISIBLE);   // Hiển thị layout chính
-
         // 1. Hiển thị thông tin thiết bị
         TextView deviceNameText = v.findViewById(R.id.deviceNameText);
         TextView osText = v.findViewById(R.id.osText);

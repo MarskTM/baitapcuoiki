@@ -12,6 +12,7 @@ public class DeviceSession {
     private String bluetoothDeviceName;
     private String bluetoothMac;
 
+    // Cũ: Dùng cho logic gộp
     public void setServer(String url) {
         this.type = Type.SERVER;
         this.serverUrl = url;
@@ -21,6 +22,15 @@ public class DeviceSession {
         this.type = Type.BLUETOOTH;
         this.bluetoothDeviceName = name;
         this.bluetoothMac = mac;
+    }
+
+    // ✅ MỚI: bổ sung các setter riêng cho type và url
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setServerUrl(String url) {
+        this.serverUrl = url;
     }
 
     public Type getType() {

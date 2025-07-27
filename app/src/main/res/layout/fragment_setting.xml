@@ -4,44 +4,6 @@
     android:layout_height="match_parent"
     android:background="#F3F3F3">
 
-    <!-- Form đăng ký user (ẩn mặc định) -->
-    <LinearLayout
-        android:id="@+id/registerUserForm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:visibility="gone"
-        android:layout_gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng ký người dùng mới"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_gravity="center"/>
-
-        <EditText
-            android:id="@+id/usernameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Tên đăng nhập" />
-
-        <EditText
-            android:id="@+id/passwordEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mật khẩu"
-            android:inputType="textPassword" />
-
-        <Button
-            android:id="@+id/registerButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đăng ký" />
-    </LinearLayout>
-
     <!-- Layout cho user thường -->
     <LinearLayout
         android:id="@+id/normalLayout"
@@ -50,8 +12,7 @@
         android:orientation="vertical"
         android:padding="24dp"
         android:gravity="center_horizontal"
-        android:layout_gravity="center"
-        android:visibility="gone">
+        android:layout_gravity="center">
 
         <!-- Thông số thiết bị -->
         <TextView
@@ -104,7 +65,8 @@
             <Switch
                 android:id="@+id/bluetoothSwitch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:checked="true"/>
         </LinearLayout>
 
         <LinearLayout

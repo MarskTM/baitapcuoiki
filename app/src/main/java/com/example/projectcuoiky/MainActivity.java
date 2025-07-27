@@ -1,6 +1,9 @@
 package com.example.projectcuoiky;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +26,7 @@ import com.example.projectcuoiky.model.PlantItem;
 import com.example.projectcuoiky.SpaceItemDecoration;
 import com.example.projectcuoiky.fragment.ProfileFragment;
 import com.example.projectcuoiky.fragment.SettingFragment;
+import com.example.projectcuoiky.session.DeviceSession;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,6 +63,20 @@ public class MainActivity extends AppCompatActivity {
         homeText = findViewById(R.id.homeText);
         profileText = findViewById(R.id.profileText);
         settingText = findViewById(R.id.settingText);
+
+        // ✅ Tự động ghi nhớ server mặc định nếu chưa có
+        if (MyApp.getDeviceSession().getType() == DeviceSession.Type.NONE) {
+            String defaultServer = "http://192.168.2.6/getdata.php";
+            MyApp.getDeviceSession().setServer(defaultServer);
+            Log.d("SESSION", "Đang kết nối server tại " + defaultServer);
+
+            // ✅ Lưu thông tin server đã kết nối vào SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+            prefs.edit()
+                    .putString("server_address", defaultServer)
+                    .putBoolean("server_connected", true)
+                    .apply();
+        }
 
         // Thiết lập RecyclerView cho tab Home
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -106,18 +124,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlightTab(int tab) {
-        int colorActive = getResources().getColor(android.R.color.white); // màu nổi bật
-        int colorInactive = getResources().getColor(R.color.gray_inactive); // màu nhạt
+        int colorActive = getResources().getColor(android.R.color.white);
+        int colorInactive = getResources().getColor(R.color.gray_inactive);
 
-        // Home
         homeIcon.setColorFilter(tab == 0 ? colorActive : colorInactive);
         homeText.setTextColor(tab == 0 ? colorActive : colorInactive);
 
-        // Profile
         profileIcon.setColorFilter(tab == 1 ? colorActive : colorInactive);
         profileText.setTextColor(tab == 1 ? colorActive : colorInactive);
 
-        // Setting
         settingIcon.setColorFilter(tab == 2 ? colorActive : colorInactive);
         settingText.setTextColor(tab == 2 ? colorActive : colorInactive);
     }

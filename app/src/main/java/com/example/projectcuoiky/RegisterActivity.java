@@ -1,7 +1,11 @@
 package com.example.projectcuoiky;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +22,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
     @Override
@@ -92,5 +100,62 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static class BluetoothConnector {
+        private BluetoothSocket socket;
+        private InputStream inputStream;
+        private OutputStream outputStream;
+        private final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+        public interface Listener {
+            void onConnected();
+            void onDataReceived(String data);
+            void onError(String message);
+        }
+
+        public void connect(String address, Listener listener) {
+            new Thread(() -> {
+                try {
+                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                    BluetoothDevice device = adapter.getRemoteDevice(address);
+                    socket = device.createRfcommSocketToServiceRecord(SPP_UUID);
+                    socket.connect();
+
+                    inputStream = socket.getInputStream();
+                    outputStream = socket.getOutputStream();
+
+                    listener.onConnected();
+
+                    byte[] buffer = new byte[1024];
+                    int bytes;
+                    while ((bytes = inputStream.read(buffer)) != -1) {
+                        String received = new String(buffer, 0, bytes);
+                        listener.onDataReceived(received);
+                    }
+
+                } catch (Exception e) {
+                    Log.e("BluetoothConnector", "Error", e);
+                    listener.onError(e.getMessage());
+                    disconnect();
+                }
+            }).start();
+        }
+
+        public void send(String message) {
+            try {
+                if (outputStream != null) {
+                    outputStream.write(message.getBytes());
+                }
+            } catch (Exception e) {
+                Log.e("BluetoothConnector", "Send failed", e);
+            }
+        }
+
+        public void disconnect() {
+            try {
+                if (socket != null) socket.close();
+            } catch (Exception ignored) {}
+        }
     }
 }

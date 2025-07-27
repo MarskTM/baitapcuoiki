@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -52,6 +53,8 @@ public class HealthDetailActivity extends AppCompatActivity {
     private Button btnRefresh;
 
     private BluetoothSocket bluetoothSocket;
+
+    private BluetoothConnector btConnector;
 
     private final Handler fetchHandler = new Handler();
     private final Runnable fetchRunnable = new Runnable() {
@@ -105,18 +108,27 @@ public class HealthDetailActivity extends AppCompatActivity {
                 @Override public void onAnimationRepeat(Animation animation) {}
             });
         });
+
+        // ✅ Hiển thị thông tin server khả dụng
+        TextView textServerName = findViewById(R.id.textServerName);
+        TextView textServerStatus = findViewById(R.id.textServerStatus);
+
+        // Đọc dữ liệu từ SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        String address = prefs.getString("server_address", "Chưa có server");
+        boolean connected = prefs.getBoolean("server_connected", false);
+
+        // Gán hiển thị
+        textServerName.setText("Địa chỉ: " + address);
+        textServerStatus.setText("Tình trạng: " + (connected ? "đã kết nối" : "chưa kết nối"));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         fetchHandler.removeCallbacks(fetchRunnable);
-        try {
-            if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
-                bluetoothSocket.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (btConnector != null) {
+            btConnector.disconnect();
         }
     }
 
@@ -150,23 +162,25 @@ public class HealthDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Đang kết nối tới: " + device.address, Toast.LENGTH_SHORT).show();
             MyApp.getDeviceSession().setBluetooth(device.name, device.address);
 
-            BluetoothDevice btDevice = bluetoothAdapter.getRemoteDevice(device.address);
-
-            new Thread(() -> {
-                try {
-                    bluetoothSocket = btDevice.createRfcommSocketToServiceRecord(SPP_UUID);
-                    bluetoothSocket.connect();
-
-                    runOnUiThread(() -> Toast.makeText(this, "✅ Đã kết nối Bluetooth", Toast.LENGTH_SHORT).show());
-
-                    bluetoothSocket.getOutputStream().write("START".getBytes());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    runOnUiThread(() ->
-                            Toast.makeText(this, "❌ Lỗi kết nối: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            btConnector = new BluetoothConnector();
+            btConnector.connect(device.address, new BluetoothConnector.Listener() {
+                @Override
+                public void onConnected() {
+                    runOnUiThread(() -> Toast.makeText(HealthDetailActivity.this, "✅ Đã kết nối Bluetooth", Toast.LENGTH_SHORT).show());
+                    btConnector.send("START"); // gửi lệnh mở gửi dữ liệu nếu cần
                 }
-            }).start();
+
+                @Override
+                public void onDataReceived(String data) {
+                    Log.d("BLE-DATA", "Dữ liệu từ thiết bị: " + data);
+                    // TODO: Nếu cần parse JSON tại đây
+                }
+
+                @Override
+                public void onError(String message) {
+                    runOnUiThread(() -> Toast.makeText(HealthDetailActivity.this, "❌ Lỗi Bluetooth: " + message, Toast.LENGTH_LONG).show());
+                }
+            });
         });
 
         recyclerView.setAdapter(adapter);
